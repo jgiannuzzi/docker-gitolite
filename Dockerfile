@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:3.4
 
 # Install OpenSSH server and Gitolite
 # Unlock the automatically-created git user
