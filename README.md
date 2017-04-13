@@ -16,7 +16,6 @@ Create volumes for your SSH server host keys and for your Gitolite config and re
 * Docker < 1.9
 
         docker create --name gitolite-data -v /etc/ssh/keys -v /var/lib/git tianon/true
-        docker run --rm --volumes-from gitolite-data alpine:3.3 chown 1000 /var/lib/git
 
 Setup Gitolite with yourself as the administrator:
 

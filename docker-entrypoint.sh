@@ -12,7 +12,10 @@ if [ "${1}" = 'sshd' ]; then
     grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
   done
 fi
- 
+
+# Fix permissions at every startup
+chown -R git:git ~git
+
 # Setup gitolite admin  
 if [ ! -f ~git/.ssh/authorized_keys ]; then
   if [ -n "$SSH_KEY" ]; then
