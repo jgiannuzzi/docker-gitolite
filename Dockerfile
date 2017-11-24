@@ -3,7 +3,7 @@ FROM alpine:edge
 # Install OpenSSH server and Gitolite
 # Unlock the automatically-created git user
 RUN set -x \
- && apk add --no-cache gitolite openssh \
+ && apk add --no-cache gitolite openssh dumb-init \
  && passwd -u git
 
 # Volume used to store SSH host keys, generated on first run
