@@ -1,0 +1,13 @@
+[template]
+src = "auth-key-git.conf.tmpl"
+dest = "/etc/authkeygit/authkeygitrc"
+
+keys = [
+	"/authkeygit/ldap_attrs",
+	"/authkeygit/ldap_dngroup",
+	"/authkeygit/ldap_filter",
+	"/authkeygit/ldap_addr",
+	"/authkeygit/git_options",
+	"/authkeygit/git_shell",
+	"/authkeygit/git_user"
+]

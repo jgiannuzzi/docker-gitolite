@@ -1,0 +1,12 @@
+[ldap]
+attrs = {{getv "/authkeygit/ldap/attrs"}}
+dn_group = {{getv "/authkeygit/ldap/dngroup"}}
+filter = {{getv "/authkeygit/ldap/filter"}}
+ldap_addr = {{getv "/authkeygit/ldap/addr"}}
+
+[git]
+{{if exists "/authkeygit/git/options"}}
+options = {{getv "/authkeygit/git/options"}}
+{{end}}
+shell = /usr/lib/gitolite/gitolite-shell
+user = git

@@ -1,0 +1,10 @@
+[ldap]
+attrs = uid,sshPublicKey
+dn_group = ou=lse,ou=labos,dc=epita,dc=net
+filter = uid=*
+ldap_addr = ldaps://auth.pie.cri.epita.net
+
+[git]
+options = no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty
+shell = /usr/lib/gitolite/gitolite-shell
+user = git

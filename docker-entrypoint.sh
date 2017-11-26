@@ -11,6 +11,24 @@ if [ "${1}" = 'sshd' ]; then
     [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
     grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
   done
+
+  # Setup AuthorizedKeysCommand if needed
+  if [ -z "$(grep '^AuthorizedKeysCommand' /etc/ssh/sshd_config)" ]; then
+    echo 'AuthorizedKeysCommand /usr/local/bin/auth_key_git' >> /etc/ssh/sshd_config
+  fi
+
+  # Setup AuthorizedKeysCommandUser user if needed
+  if [ -z "$(grep '^AuthorizedKeysCommandUser' /etc/ssh/sshd_config)" ]; then
+    echo 'AuthorizedKeysCommandUser root' >> /etc/ssh/sshd_config
+  fi
+fi
+
+if [ ! -f "/etc/authkeygit/authkeygitrc" ] || [ -n "${CONFD_CMDLINE}" ]; then
+  mkdir -p /etc/authkeygit
+  if ! eval ${CONFD_CMDLINE:-confd -onetime -backend env}; then
+    echo "confd failed" >&2
+    exit 1
+  fi
 fi
 
 # Fix permissions at every startup
