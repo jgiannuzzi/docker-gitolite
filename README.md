@@ -4,6 +4,22 @@ This image allows you to run a git server in a container with OpenSSH and [Gitol
 
 Based on Alpine Linux.
 
+# Environment variables
+
+* CONFD_CMDLINE: confd command line (default: `confd -onetime -backend env`)
+* SSH_KEY: Public key of gitolite admin (first run only)
+* SSH_KEY_NAME: Name of gitolite admin (first run only)
+
+## Confd environment variables
+
+These must be set at first run or when overriding confd command line.
+
+* AUTHKEYGIT_LDAP_ATTRS
+* AUTHKEYGIT_LDAP_DNGROUP
+* AUTHKEYGIT_LDAP_FILTER
+* AUTHKEYGIT_LDAP_ADDR
+* AUTHKEYGIT_GIT_OPTIONS (defaults to 'no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty')
+
 ## Quick setup
 
 Create volumes for your SSH server host keys and for your Gitolite config and repositories
