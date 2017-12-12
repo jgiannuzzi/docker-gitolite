@@ -11,6 +11,8 @@ if [ "${1}" = 'sshd' ]; then
     [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
     grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
   done
+  # Disable unwanted authentications
+  sed -i -E -e 's/^#?(\w+Authentication)\s.*/\1 no/' -e 's/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
 fi
 
 # Fix permissions at every startup
