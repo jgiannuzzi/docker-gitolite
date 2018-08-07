@@ -12,9 +12,9 @@ if [ "${1}" = 'sshd' ]; then
     grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
   done
   # Disable unwanted authentications
-  sed -i -E -e 's/^#?(\w+Authentication)\s.*/\1 no/' -e 's/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
+  perl -i -pe 's/^#?((?!Kerberos|GSSAPI)\w*Authentication)\s.*/\1 no/; s/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
   # Disable sftp subsystem
-  sed -i -E 's/^Subsystem\ssftp\s/#&/' /etc/ssh/sshd_config
+  perl -i -pe 's/^(Subsystem\ssftp\s)/#\1/' /etc/ssh/sshd_config
 fi
 
 # Fix permissions at every startup
