@@ -5,24 +5,25 @@ sed -i 's@#PasswordAuthentication yes@PasswordAuthentication no@g' /etc/ssh/sshd
 
 # if command is sshd, set it up correctly
 if [ "${1}" = 'sshd' ]; then
-  set -- /usr/sbin/sshd -D -e
+  shift 1
+  set -- /usr/sbin/sshd -D -e "$@"
+fi
 
-  # Setup SSH HostKeys if needed
-  for algorithm in rsa dsa ecdsa ed25519
-  do
-    keyfile=/etc/ssh/keys/ssh_host_${algorithm}_key
-    [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
-    chmod 600 $keyfile
-    grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
-  done
-  # Disable unwanted authentications
-  perl -i -pe 's/^#?((?!Kerberos|GSSAPI)\w*Authentication)\s.*/\1 no/; s/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
-  # Disable sftp subsystem
-  perl -i -pe 's/^(Subsystem\ssftp\s)/#\1/' /etc/ssh/sshd_config
-  # Override the SSH port if an override is set
-  if [ "${GITOLITE_SSH_OVERRIDE}" != "" ];then
-	  echo "Port = ${GITOLITE_SSH_OVERRIDE}" >> /etc/ssh/sshd_config
-  fi
+# Setup SSH HostKeys if needed
+for algorithm in rsa dsa ecdsa ed25519
+do
+  keyfile=/etc/ssh/keys/ssh_host_${algorithm}_key
+  [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
+  chmod 600 $keyfile
+  grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
+done
+# Disable unwanted authentications
+perl -i -pe 's/^#?((?!Kerberos|GSSAPI)\w*Authentication)\s.*/\1 no/; s/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
+# Disable sftp subsystem
+perl -i -pe 's/^(Subsystem\ssftp\s)/#\1/' /etc/ssh/sshd_config
+# Override the SSH port if an override is set
+if [ "${GITOLITE_SSH_OVERRIDE}" != "" ];then
+  echo "Port = ${GITOLITE_SSH_OVERRIDE}" >> /etc/ssh/sshd_config
 fi
 
 # Fix permissions at every startup
