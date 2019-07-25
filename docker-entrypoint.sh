@@ -2,20 +2,21 @@
 
 # if command is sshd, set it up correctly
 if [ "${1}" = 'sshd' ]; then
-  set -- /usr/sbin/sshd -D
-
-  # Setup SSH HostKeys if needed
-  for algorithm in rsa dsa ecdsa ed25519
-  do
-    keyfile=/etc/ssh/keys/ssh_host_${algorithm}_key
-    [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
-    grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
-  done
-  # Disable unwanted authentications
-  perl -i -pe 's/^#?((?!Kerberos|GSSAPI)\w*Authentication)\s.*/\1 no/; s/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
-  # Disable sftp subsystem
-  perl -i -pe 's/^(Subsystem\ssftp\s)/#\1/' /etc/ssh/sshd_config
+  shift 1
+  set -- /usr/sbin/sshd -D -e "$@"
 fi
+
+# Setup SSH HostKeys if needed
+for algorithm in rsa dsa ecdsa ed25519
+do
+  keyfile=/etc/ssh/keys/ssh_host_${algorithm}_key
+  [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
+  grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
+done
+# Disable unwanted authentications
+perl -i -pe 's/^#?((?!Kerberos|GSSAPI)\w*Authentication)\s.*/\1 no/; s/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
+# Disable sftp subsystem
+perl -i -pe 's/^(Subsystem\ssftp\s)/#\1/' /etc/ssh/sshd_config
 
 # Fix permissions at every startup
 chown -R git:git ~git
