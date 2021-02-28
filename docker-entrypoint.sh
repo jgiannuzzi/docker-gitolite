@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# disable ssh password authentication
+sed -i 's@#PasswordAuthentication yes@PasswordAuthentication no@g' /etc/ssh/sshd_config
+
 # if command is sshd, set it up correctly
 if [ "${1}" = 'sshd' ]; then
   set -- /usr/sbin/sshd -D -e
