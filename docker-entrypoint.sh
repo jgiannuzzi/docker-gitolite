@@ -16,6 +16,10 @@ if [ "${1}" = 'sshd' ]; then
   perl -i -pe 's/^#?((?!Kerberos|GSSAPI)\w*Authentication)\s.*/\1 no/; s/^(PubkeyAuthentication) no/\1 yes/' /etc/ssh/sshd_config
   # Disable sftp subsystem
   perl -i -pe 's/^(Subsystem\ssftp\s)/#\1/' /etc/ssh/sshd_config
+  # Override the SSH port if an override is set
+  if [ "${GITOLITE_SSH_OVERRIDE}" != "" ];then
+	  echo "Port = ${GITOLITE_SSH_OVERRIDE}" >> /etc/ssh/sshd_config
+  fi
 fi
 
 # Fix permissions at every startup
