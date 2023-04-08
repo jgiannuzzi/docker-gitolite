@@ -9,6 +9,7 @@ if [ "${1}" = 'sshd' ]; then
   do
     keyfile=/etc/ssh/keys/ssh_host_${algorithm}_key
     [ -f $keyfile ] || ssh-keygen -q -N '' -f $keyfile -t $algorithm
+    chmod 600 $keyfile
     grep -q "HostKey $keyfile" /etc/ssh/sshd_config || echo "HostKey $keyfile" >> /etc/ssh/sshd_config
   done
   # Disable unwanted authentications
