@@ -1,10 +1,14 @@
-FROM alpine:3.10
+# Use the latest available, fully specified Alpine version
+ARG ALPINE_VERSION=3.10
 
-# Install OpenSSH server and Gitolite
-# Unlock the automatically-created git user
+# Set up the base for the `runtime` layer
+FROM alpine:${ALPINE_VERSION} AS runtime
+
+# Install OpenSSH server and Gitolite and unlock the automatically-created git
+# user
 RUN set -x \
- && apk add --no-cache gitolite openssh \
- && passwd -u git
+    && apk add --no-cache gitolite openssh \
+    && passwd -u git
 
 # Volume used to store SSH host keys, generated on first run
 VOLUME /etc/ssh/keys
