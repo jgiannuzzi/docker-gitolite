@@ -1,5 +1,5 @@
 # Use the latest available, fully specified Alpine version
-ARG ALPINE_VERSION=3.10
+ARG ALPINE_VERSION=3.18.3
 
 # Set up the base for the `runtime` layer
 FROM alpine:${ALPINE_VERSION} AS runtime
