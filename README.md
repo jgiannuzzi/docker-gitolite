@@ -5,7 +5,29 @@ This image allows you to run a git server in a container with OpenSSH and
 
 Based on Alpine Linux.
 
-## Quick setup
+## Quick(est) setup using Docker Compose
+
+1.  Clone this repository:
+
+    ```sh
+    $ git clone https://github.com/gbence/docker-gitolite
+    ```
+
+2.  Set up SSH keys, administrator and repositories:
+
+    ```sh
+    $ docker compose run --rm -e SSH_KEY="$(ssh-add -L)" \
+        -e SSH_KEY_NAME="$(whoami)" \
+        server true
+    ```
+
+3.  Start the service:
+
+    ```sh
+    $ docker compose up -d
+    ```
+
+## Quick setup using Docker
 
 1.  Create volumes for your SSH server host keys and for your Gitolite config
     and repositories:
@@ -15,7 +37,7 @@ Based on Alpine Linux.
     $ docker volume create --name gitolite-git
     ```
 
-2.  Setup Gitolite with yourself as the administrator:
+2.  Set up Gitolite with yourself as the administrator:
 
     ```sh
     $ docker run --rm -e SSH_KEY="$(cat ~/.ssh/id_rsa.pub)" \
