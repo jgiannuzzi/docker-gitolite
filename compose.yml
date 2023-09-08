@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  server:
+    build: .
+    ports:
+      - ${SSH_PORT-22}:22
+    restart: unless-stopped
+    volumes:
+      - keys:/etc/ssh/keys
+      - repositories:/var/lib/git
+
+volumes:
+  keys:
+  repositories:
