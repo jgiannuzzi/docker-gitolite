@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - ${SSH_PORT-22}:22
+    restart: unless-stopped
     volumes:
       - keys:/etc/ssh/keys
       - repositories:/var/lib/git
